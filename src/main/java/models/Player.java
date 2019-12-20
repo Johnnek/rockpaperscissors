@@ -4,7 +4,6 @@ public class Player {
 
     private String name;
     private Turn turn;
-    private int winCounter;
 
     public String getName() {
         return name;
@@ -22,11 +21,4 @@ public class Player {
         this.turn = turn;
     }
 
-    public int getWinCounter() {
-        return winCounter;
-    }
-
-    public void setWinCounter(int winCounter) {
-        this.winCounter = winCounter;
-    }
 }
