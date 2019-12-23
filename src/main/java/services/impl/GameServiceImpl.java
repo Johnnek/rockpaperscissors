@@ -3,58 +3,70 @@ package services.impl;
 import models.Player;
 import models.Turn;
 import models.WinCounter;
-import services.Game;
+import services.GameService;
 
 import java.util.Random;
+import java.util.Scanner;
 
-public class GameImpl implements Game {
+public class GameServiceImpl implements GameService {
 
-    Player playerA;
-    Player playerB;
-    WinCounter winCounter = new WinCounter();
-    int falseCounter = 0;
+    private Player playerA;
+    private Player playerB;
+    private WinCounter winCounter;
+    private int falseCounter = 0;
 
 
     /**
      * This functions starts a game with 100 rounds
      */
-    public void runGame() {
-        playerA = new Player();
-        playerA.setName("Player A");
-        playerB = new Player();
-        playerB.setName("Player B");
+    @Override
+    public WinCounter runGameWithFixLength() {
+        playerA = new Player("Player A");
+        playerB = new Player("Player B");
+        winCounter = new WinCounter();
 
         int tmp;
-        int draw = 0;
-        int winnerPlayerA = 0;
-        int winnerPlayerB = 0;
-        for (int i = 0; i<100; i++){
+        for (int round = 0; round<100; round++){
             chooseTurn(playerA, winCounter);
             chooseTurn(playerB, winCounter);
-            //System.out.println("Player A in GameImpl.runGame() in loop, choose turn: " + playerA.getTurn());
+
             tmp = faceOff(playerA, playerB);
             if (tmp == 0) {
-                draw++;
-                winCounter.setDraws(draw);
+                winCounter.setDraws(winCounter.getDraws()+1);
             }
             else if (tmp == 1) {
-                winnerPlayerA++;
-                winCounter.setWinnerPlayerA(winnerPlayerA);
+                winCounter.setWinnerPlayerA(winCounter.getWinnerPlayerA()+1);
             }
             else if (tmp == 2) {
-                winnerPlayerB++;
-                winCounter.setWinnerPlayerB(winnerPlayerB);
+                winCounter.setWinnerPlayerB(winCounter.getWinnerPlayerB()+1);
             } else {
-                System.err.println("Error occured in choosing turn");
+                System.err.println("Error occured in choosing a turn");
             }
 
         }
         System.out.println("Player A won "+winCounter.getWinnerPlayerA()+" times.");
         System.out.println("Player B won "+winCounter.getWinnerPlayerB()+" times.");
         System.out.println("The players tied "+winCounter.getDraws()+" times.");
+        return winCounter;
     }
 
-    public Player chooseTurn(Player player, WinCounter winCounter) {
+    @Override
+    public void runGameWithVariableLength() {
+        playerA = new Player("Player A");
+        playerB = new Player("Player B");
+
+        System.out.println("How many rounds do you want to play?");
+        Scanner scanner = new Scanner(System.in);
+        int maxRounds = scanner.nextInt();
+
+        for (int round = 0; round<maxRounds; round++){
+            chooseTurn(playerA, winCounter);
+            chooseTurn(playerB, winCounter);
+        }
+    }
+
+    @Override
+    public void chooseTurn(Player player, WinCounter winCounter) {
         if(player.getName().equals("Player A")){
             player.setTurn(Turn.PAPER);
         }
@@ -85,17 +97,16 @@ public class GameImpl implements Game {
                     System.out.println(falseCounter);
                 }
             }
-            return player;
         }
-        return player;
     }
 
     /**
+     * Function to check who wins the rounds
      * @param playerA Object of the first player: Player A
      * @param playerB Object of the second player: Player B
      * @return Number between 0-2; 0 = Tie, 1 = Player A win, 2 = Player B win, -1 = Error
      */
-    // Function to check who has won
+    @Override
     public int faceOff(Player playerA, Player playerB) {
         if ("Rock".equals(playerA.getTurn().toValue())){
             if("Rock".equals(playerB.getTurn().toValue())){
