@@ -1,11 +1,12 @@
-import services.Game;
-import services.impl.GameImpl;
+import services.GameService;
+import services.impl.GameServiceImpl;
 
 public class RockPaperScissorsApplication {
 
     public static void main(String[] args) {
-        Game game = new GameImpl();
+        GameService gameService = new GameServiceImpl();
 
-        game.runGame();
+        gameService.runGameWithFixLength();
+        gameService.runGameWithVariableLength();
     }
 }
