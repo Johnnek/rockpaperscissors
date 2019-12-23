@@ -5,11 +5,11 @@ import models.WinCounter;
 
 public interface GameService {
 
-    WinCounter runGameWithFixLength();
-
-    void runGameWithVariableLength();
+    WinCounter runGame(int maxRounds);
 
     void chooseTurn(Player player, WinCounter winCounter);
 
     int faceOff(Player playerA, Player playerB);
+
+    int alternativeFaceOff(Player playerA, Player playerB);
 }
