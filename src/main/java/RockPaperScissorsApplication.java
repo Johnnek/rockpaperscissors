@@ -3,7 +3,7 @@ import services.impl.GameServiceImpl;
 
 import java.util.Scanner;
 
-public class RockPaperScissorsApplication {
+class RockPaperScissorsApplication {
 
     public static void main(String[] args) {
         GameService gameService = new GameServiceImpl();

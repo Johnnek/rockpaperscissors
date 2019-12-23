@@ -8,7 +8,7 @@ import java.util.Map;
 public enum Turn {
     ROCK, PAPER, SCISSOR;
 
-    private static Map<String, Turn> turnMap = new HashMap<String, Turn>();
+    private static Map<String, Turn> turnMap = new HashMap<>();
 
     static {
         turnMap.put("Rock", ROCK);
