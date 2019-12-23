@@ -1,6 +1,5 @@
 package models;
 
-import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonValue;
 
 import java.util.HashMap;
@@ -17,15 +16,10 @@ public enum Turn {
         turnMap.put("Scissor", SCISSOR);
     }
 
-    @JsonCreator
-    public static Turn forValue(String value){
-        return turnMap.get(value);
-    }
-
     @JsonValue
-    public String toValue(){
-        for (Map.Entry<String, Turn> entry : turnMap.entrySet()){
-            if(entry.getValue()==this){
+    public String toValue() {
+        for (Map.Entry<String, Turn> entry : turnMap.entrySet()) {
+            if (entry.getValue() == this) {
                 return entry.getKey();
             }
         }

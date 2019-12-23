@@ -5,7 +5,8 @@ public class Player {
     private String name;
     private Turn turn;
 
-    public Player(){}
+    public Player() {
+    }
 
     public Player(String name) {
         this.name = name;
