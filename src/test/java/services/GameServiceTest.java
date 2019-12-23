@@ -16,12 +16,11 @@ public class GameServiceTest {
 
     @Test
     public void testRunGameWithFixLength() {
-        winCounter = gameService.runGameWithFixLength();
+        winCounter = gameService.runGame(100);
 
         Assert.assertNotNull(winCounter);
-        assertEquals(32, winCounter.getDraws());
-        assertEquals(31, winCounter.getWinnerPlayerA());
-        assertEquals(37, winCounter.getWinnerPlayerB());
+        assertEquals(100, winCounter.getTies()
+                + winCounter.getWinsPlayerA() + winCounter.getWinsPlayerB());
     }
 
     @Test
@@ -30,11 +29,12 @@ public class GameServiceTest {
         gameService.chooseTurn(player, winCounter);
 
         Assert.assertNotNull(player.getTurn());
-        assertEquals("Paper", player.getTurn().toValue());
+        Assert.assertTrue("Rock".equals(player.getTurn().toValue()) ||
+                "Paper".equals(player.getTurn().toValue()) || "Scissor".equals(player.getTurn().toValue()));
 
         Player playerB = new Player("");
         winCounter = new WinCounter();
-        winCounter.setDraws(31);
+        winCounter.setTies(31);
         gameService.chooseTurn(playerB, winCounter);
 
         Assert.assertNotNull(playerB.getTurn());
@@ -52,6 +52,21 @@ public class GameServiceTest {
 
         int result = gameService.faceOff(player, playerB);
 
+        assertTrue(0 <= result && result < 3);
+    }
+
+    @Test
+    public void testAlternativeFaceOff() {
+        player = new Player("Player A");
+        Player playerB = new Player("John Doe");
+        winCounter = new WinCounter();
+
+        gameService.chooseTurn(player, winCounter);
+        gameService.chooseTurn(playerB, winCounter);
+
+        int result = gameService.alternativeFaceOff(player, playerB);
+
+        assertNotEquals(-1, result);
         assertTrue(0 <= result && result < 3);
     }
 }
