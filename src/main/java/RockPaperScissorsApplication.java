@@ -16,8 +16,8 @@ class RockPaperScissorsApplication {
 
         // while (input != 1 && input != 2)
         while (!(input > 0 && input < 3)) {
-            Scanner modeScanner = new Scanner(System.in);
 
+            Scanner modeScanner = new Scanner(System.in);
             input = modeScanner.nextInt();
 
             if (input == 1) {
