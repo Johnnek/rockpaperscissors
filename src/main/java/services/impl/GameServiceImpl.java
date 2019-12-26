@@ -52,9 +52,9 @@ public class GameServiceImpl implements GameService {
      */
     public void output(WinCounter winCounter) {
         int playedRounds = winCounter.getTies()+winCounter.getWinsPlayerA()+winCounter.getWinsPlayerB();
-        System.out.println(playerA.getName() + " won " + winCounter.getWinsPlayerA() + " of " + playedRounds + " times.");
-        System.out.println(playerB.getName() + " won " + winCounter.getWinsPlayerB() + " of " + playedRounds + " times.");
-        System.out.println("The players tied " + winCounter.getTies() + " of " + playedRounds + " times.");
+        System.out.println(playerA.getName() + " won " + winCounter.getWinsPlayerA() + " of " + playedRounds + " rounds.");
+        System.out.println(playerB.getName() + " won " + winCounter.getWinsPlayerB() + " of " + playedRounds + " rounds.");
+        System.out.println("The players tied " + winCounter.getTies() + " of " + playedRounds + " rounds.");
     }
 
     /**

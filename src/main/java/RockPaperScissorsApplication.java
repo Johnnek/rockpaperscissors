@@ -20,9 +20,8 @@ class RockPaperScissorsApplication {
         boolean flag = false;
         int input = 0;
 
-        // Run the while loop as long as no game has been played
         while (!flag) {
-            if (input != 1 && input != 2) {
+            if (input != 2) {
                 Scanner modeScanner = new Scanner(System.in);
                 try {
                     System.out.print("Type in the game mode (1 for 100 rounds, 2 for variable rounds or 9 to end the application): ");
