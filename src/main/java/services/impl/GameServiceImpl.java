@@ -67,8 +67,12 @@ public class GameServiceImpl implements GameService {
         Random random = new Random();
         // Pick a random turn between 0-2; 0 = Rock, 1 = Paper, 2 = Scissor
         player.setTurn(Turn.values()[random.nextInt(3)]);
+
+        /*
         // Output to see which turn got chosen
         System.out.println(player.getTurn().toValue());
+        */
+
         /*
         // Alternative output to get closer to the 31-37-32 game result
         int tmp = random.nextInt(1000);
@@ -82,6 +86,7 @@ public class GameServiceImpl implements GameService {
             player.setTurn(Turn.SCISSOR);
         }
         */
+
         /*
         // Alternative output to get the exact 31-37-32 game result
         boolean flag = false;
