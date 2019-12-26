@@ -14,7 +14,7 @@ public class GameServiceImpl implements GameService {
     private Player playerB;
 
     /**
-     * This functions starts a game with 100 rounds
+     * This functions starts a game with given rounds
      */
     @Override
     public WinCounter runGame(int maxRounds) {
@@ -22,7 +22,7 @@ public class GameServiceImpl implements GameService {
         playerB = new Player("Player B");
         WinCounter winCounter = new WinCounter();
         runRounds(maxRounds, winCounter);
-        output(maxRounds, winCounter);
+        output(winCounter);
         return winCounter;
     }
 
@@ -35,25 +35,26 @@ public class GameServiceImpl implements GameService {
         for (int round = 0; round < maxRounds; round++) {
             playerA.setTurn(Turn.PAPER);
             chooseTurn(playerB, winCounter);
-            int tmp = faceOff(playerA, playerB);
+            int tmp = alternativeFaceOff(playerA, playerB);
 
             if (tmp == 0) {
                 winCounter.setTies(winCounter.getTies() + 1);
             } else if (tmp == 1) {
                 winCounter.setWinsPlayerA(winCounter.getWinsPlayerA() + 1);
-            } else {
+            } else if (tmp == 2) {
                 winCounter.setWinsPlayerB(winCounter.getWinsPlayerB() + 1);
             }
         }
     }
 
     /**
-     * @param maxRounds Amount of rounds played in a game
+     * @param winCounter Object with ties, wins player A and wins player B
      */
-    private void output(int maxRounds, WinCounter winCounter) {
-        System.out.println(playerA.getName() + " won " + winCounter.getWinsPlayerA() + " of " + maxRounds + " times.");
-        System.out.println(playerB.getName() + " won " + winCounter.getWinsPlayerB() + " of " + maxRounds + " times.");
-        System.out.println("The players tied " + winCounter.getTies() + " of " + maxRounds + " times.");
+    public void output(WinCounter winCounter) {
+        int playedRounds = winCounter.getTies()+winCounter.getWinsPlayerA()+winCounter.getWinsPlayerB();
+        System.out.println(playerA.getName() + " won " + winCounter.getWinsPlayerA() + " of " + playedRounds + " times.");
+        System.out.println(playerB.getName() + " won " + winCounter.getWinsPlayerB() + " of " + playedRounds + " times.");
+        System.out.println("The players tied " + winCounter.getTies() + " of " + playedRounds + " times.");
     }
 
     /**
@@ -64,8 +65,12 @@ public class GameServiceImpl implements GameService {
     public void chooseTurn(Player player, WinCounter winCounter) {
 
         Random random = new Random();
+        // Pick a random turn between 0-2; 0 = Rock, 1 = Paper, 2 = Scissor
         player.setTurn(Turn.values()[random.nextInt(3)]);
+        // Output to see which turn got chosen
+        System.out.println(player.getTurn().toValue());
         /*
+        // Alternative output to get closer to the 31-37-32 game result
         int tmp = random.nextInt(1000);
         if(tmp >= 0 && tmp < 310){
             player.setTurn(Turn.ROCK);
@@ -78,6 +83,7 @@ public class GameServiceImpl implements GameService {
         }
         */
         /*
+        // Alternative output to get the exact 31-37-32 game result
         boolean flag = false;
         while(!flag){
             player.setTurn(Turn.values()[random.nextInt(3)]);
@@ -109,26 +115,34 @@ public class GameServiceImpl implements GameService {
      *
      * @param playerA Object of the first player: Player A
      * @param playerB Object of the second player: Player B
-     * @return Number between 0-2; 0 = Tie, 1 = Player A win, 2 = Player B win
+     * @return Number between 0-2; 0 = tie, 1 = Player A win, 2 = Player B win, -1 = error
      */
     @Override
     public int faceOff(Player playerA, Player playerB) {
-        if ("Rock".equals(playerA.getTurn().toValue())) {
-            if ("Rock".equals(playerB.getTurn().toValue())) {
-                return 0;
-            } else if ("Paper".equals(playerB.getTurn().toValue())) return 2;
-            else return 1;
-        } else if ("Paper".equals(playerA.getTurn().toValue())) {
-            if ("Paper".equals(playerB.getTurn().toValue())) {
-                return 0;
-            } else if ("Rock".equals(playerB.getTurn().toValue())) return 1;
-            else return 2;
-        } else {
-            if ("Scissor".equals(playerB.getTurn().toValue())) {
-                return 0;
-            } else if ("Paper".equals(playerB.getTurn().toValue())) return 1;
-            else return 2;
+        // Check if both players have chosen their turns
+        if (playerA.getTurn() != null && playerB.getTurn() != null) {
+            // Check different turns
+            if ("Rock".equals(playerA.getTurn().toValue())) {
+                if ("Rock".equals(playerB.getTurn().toValue())) {
+                    return 0;
+                } else if ("Paper".equals(playerB.getTurn().toValue())) return 2;
+                else if ("Scissor".equals(playerB.getTurn().toValue())) return 1;
+                else return -1;
+            } else if ("Paper".equals(playerA.getTurn().toValue())) {
+                if ("Paper".equals(playerB.getTurn().toValue())) {
+                    return 0;
+                } else if ("Rock".equals(playerB.getTurn().toValue())) return 1;
+                else if ("Scissor".equals(playerB.getTurn().toValue())) return 2;
+                else return -1;
+            } else if ("Scissor".equals(playerA.getTurn().toValue())) {
+                if ("Scissor".equals(playerB.getTurn().toValue())) {
+                    return 0;
+                } else if ("Paper".equals(playerB.getTurn().toValue())) return 1;
+                else if ("Rock".equals(playerB.getTurn().toValue())) return 2;
+                else return -1;
+            }
         }
+        return -1;
     }
 
     /**
@@ -136,7 +150,7 @@ public class GameServiceImpl implements GameService {
      *
      * @param playerA Object of the first player: Player A
      * @param playerB Object of the second player: Player B
-     * @return Number between 0-2; 0 = Tie, 1 = Player A win, 2 = Player B win
+     * @return Number between 0-2; 0 = tie, 1 = Player A win, 2 = Player B win, -1 = error
      */
     @Override
     public int alternativeFaceOff(Player playerA, Player playerB) {
